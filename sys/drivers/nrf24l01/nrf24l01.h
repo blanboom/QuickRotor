@@ -1,6 +1,8 @@
 #ifndef DRIVERS_NRF24L01_NRF24L01_H_
 #define DRIVERS_NRF24L01_NRF24L01_H_
 
+#include <stdint.h>
+
 /* Which SPI use */
 #define _SPI_PORT 1
 

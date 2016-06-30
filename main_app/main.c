@@ -19,32 +19,39 @@ int main(int argc, char* argv[]){
 	trace_printf("System clock: %uHz\n", SystemCoreClock);
 	timer_start();
 
-	//RC_Init();
+	timer_sleep(2000);
 
-	timer_sleep(5000);
+	RC_Init();
 
-	//initIMU();
-
-	//Watchdog_Init(5, 500); // 1600ms
-	currentTime = 0;
-	currentTime_RC = 0;
-	for (;;) {
-		if (systemTime - currentTime > 10) {
-			currentTime = systemTime;
-			RC_Receive();
-			updateYPR();
-			computePID();
-			calculateVelocities();
-			updateMotors();
-			Watchdog_Feed();
-		}
-
-		if (systemTime - currentTime_RC > 100) {
-			currentTime_RC = systemTime;
-			RC_Receive();
-			Watchdog_Feed();
-		}
+	for(;;) {
+		// 遥控器接收
+		RC_Receive();
 	}
+
+//	timer_sleep(5000);
+//
+//	initIMU();
+//
+//	//Watchdog_Init(5, 500); // 1600ms
+//	currentTime = 0;
+//	currentTime_RC = 0;
+//	for (;;) {
+//		if (systemTime - currentTime > 10) {
+//			currentTime = systemTime;
+//			RC_Receive();
+//			updateYPR();
+//			computePID();
+//			calculateVelocities();
+//			updateMotors();
+//			Watchdog_Feed();
+//		}
+//
+//		if (systemTime - currentTime_RC > 100) {
+//			currentTime_RC = systemTime;
+//			RC_Receive();
+//			Watchdog_Feed();
+//		}
+//	}
 }
 
 #pragma GCC diagnostic pop

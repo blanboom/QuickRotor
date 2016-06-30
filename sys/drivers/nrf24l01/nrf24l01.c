@@ -5,8 +5,8 @@
 #include "drivers/nrf24l01/nrf24l01.h"
 #include "drivers/timer/timer.h"
 
-uint8_t nRF24_RX_addr[nRF24_RX_ADDR_WIDTH] = {'6','3','4','7','2'};
-uint8_t nRF24_TX_addr[nRF24_TX_ADDR_WIDTH] = {'6','3','4','7','2'};
+uint8_t nRF24_RX_addr[nRF24_RX_ADDR_WIDTH] = {'6','3','4','7','1'};
+uint8_t nRF24_TX_addr[nRF24_TX_ADDR_WIDTH] = {'6','3','4','7','1'};
 
 
 // SPI initialization with given prescaler
@@ -31,7 +31,7 @@ void nRF24_SPI_Init(uint16_t prescaler) {
 void nRF24_init() {
 #if _SPI_PORT == 1
 	// SPI1
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1 | RCC_APB2Periph_GPIOA,ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1 | RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOC, ENABLE);
 #elif _SPI_PORT == 2
 	// SPI2
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);
