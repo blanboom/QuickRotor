@@ -1,4 +1,3 @@
-// TODO: 注明来源
 // https://developer.mbed.org/users/onehorse/code/MPU9250AHRS/
 
 #include <drivers/mpu9250/mpu9250.h>
