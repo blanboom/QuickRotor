@@ -32,9 +32,9 @@ extern "C"{
 }
 #include "drivers/Mirf/Mirf.h"
 #include "drivers/Mirf/MirfHardwareSpiDriver.h"
+#include "flight_control.h"
 
-
-#define RX_PAYLOAD 8
+#define RX_PAYLOAD 4
 
 uint8_t buf[RX_PAYLOAD];
 
@@ -53,13 +53,75 @@ void RC_Init(void) {
 void RC_Receive(void) {
 	if(Mirf.dataReady()) {
 		Mirf.getData(buf);
-		trace_printf("%x, ", buf[0]);
-		trace_printf("%x, ", buf[1]);
-		trace_printf("%x, ", buf[2]);
-		trace_printf("%x, ", buf[3]);
-		trace_printf("%x, ", buf[4]);
-		trace_printf("%x, ", buf[5]);
-		trace_printf("%x, ", buf[6]);
-		trace_printf("%x\n", buf[7]);
+		trace_printf("%x, %x, %c.%c", buf[0], buf[1], buf[2], buf[3]);
+		// 设置油门或 YPR
+		if(buf[0] != 0 && buf[1] == 0 && buf[2] == 0 && buf[3] == 0) {
+			// TODO: 判断数值是否超过范围
+			switch(buf[1]) {
+			case 0x01:
+				velocity_set += 10;
+				break;
+			case 0x02:
+				velocity_set -= 10;
+				break;
+			case 0x04:
+				yaw_set += 1;
+				break;
+			case 0x08:
+				yaw_set -= 1;
+				break;
+			case 0x10:
+				pitch_set += 1;
+				break;
+			case 0x20:
+				pitch_set -= 1;
+				break;
+			case 0x40:
+				roll_set += 1;
+				break;
+			case 0x80:
+				roll_set -= 1;
+				break;
+			default:
+				break;
+			}
+		}
+		// 设置 PID
+		if(buf[0] == 0 && buf[1] != 0) {
+			if(buf[3] >= '0' && buf[3] <= '9' && buf[4] >= '0' && buf[4] <= '9') {
+				float result = (buf[3] - '0') + (float)(buf[4] - '0') / (float)10 ;
+				switch(buf[0]) {
+				case 'a':
+					yaw_Kp = result;
+					break;
+				case 'b':
+					yaw_Ki = result;
+					break;
+				case 'c':
+					yaw_Kd = result;
+					break;
+				case 'd':
+					roll_Kp = result;
+					break;
+				case 'e':
+					roll_Ki = result;
+					break;
+				case 'f':
+					roll_Kd = result;
+					break;
+				case 'g':
+					pitch_Kp = result;
+					break;
+				case 'h':
+					pitch_Ki = result;
+					break;
+				case 'i':
+					pitch_Kd = result;
+					break;
+				default:
+					break;
+				}
+			}
+		}
 	}
 }
