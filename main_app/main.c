@@ -3,7 +3,6 @@
 #include "diag/Trace.h"
 #include "drivers/timer/timer.h"
 #include "drivers/watchdog/watchdog.h"
-#include "drivers/nrf24l01/nrf24l01.h"
 #include "remote_control.h"
 #include "flight_control.h"
 
@@ -19,9 +18,10 @@ int main(int argc, char* argv[]){
 	trace_printf("System clock: %uHz\n", SystemCoreClock);
 	timer_start();
 
-//	timer_sleep(5000);
+	timer_sleep(5000);
 
 	initIMU();
+	RC_Init();
 
 	Watchdog_Init(5, 500); // 1600ms
 	currentTime = 0;
