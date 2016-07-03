@@ -78,7 +78,7 @@ void loop()
             case 'd': data[0] = 0x20; break;
             case 'r': data[0] = 0x40; break;
             case 'f': data[0] = 0x80; break;
-            default: break;
+            default: data[0] = 0; break;
             }
             sendData();
         }
@@ -86,15 +86,15 @@ void loop()
             tmp == 'n' || tmp == 'm' || tmp == ',' || tmp == '.') {
             data[0] = 0;
             while (Serial.available() == 0) ;
-            data[2] = Serial.read(); if (data[2] < '0' || data[2] > '9') break;
+            data[2] = Serial.read(); if (data[2] < '0' || data[2] > '9') return;
             while (Serial.available() == 0) ;
-            tmp2 = Serial.read(); if (tmp != '.') break;
+            tmp2 = Serial.read(); if (tmp2 != '.') return;
             while (Serial.available() == 0) ;
-            data[3] = Serial.read(); if (data[3] < '0' || data[3] > '9') break;
+            data[3] = Serial.read(); if (data[3] < '0' || data[3] > '9') return;
             while (Serial.available() == 0) ;
-            tmp2 = Serial.read(); if (tmp != '$') break;
+            tmp2 = Serial.read(); if (tmp2 != tmp) return;
             switch (tmp) {
-            case 'z': data[1] = 'a'; break; // TODO: 发送数据
+            case 'z': data[1] = 'a'; break;
             case 'x': data[1] = 'b'; break;
             case 'c': data[1] = 'c'; break;
             case 'v': data[1] = 'd'; break;
